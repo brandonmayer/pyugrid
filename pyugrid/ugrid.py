@@ -35,7 +35,8 @@ class UGrid(object):
 
     the internal structure mirrors the netcdf data standard.
     """
-
+    ug_version='0.9'
+    cf_version='1.6'
     def __init__(self,
                  nodes=None,
                  faces=None,
@@ -472,7 +473,7 @@ class UGrid(object):
         self.boundary_coordinates = boundary_coordinates
 
 
-    def save_as_netcdf(self, filepath):
+    def save_as_netcdf(self, filepath, conventions="CF-{0}, UGRID-{1}".format(cf_version, ug_version)):
         """
         save the ugrid object as a netcdf file
 
@@ -491,7 +492,7 @@ class UGrid(object):
         from netCDF4 import num2date, date2num
         # create a new netcdf file
         with ncDataset(filepath, mode="w", clobber=True) as nclocal:
-            nclocal.Conventions = 'UGRID-0.9'
+            nclocal.Conventions = conventions
             nclocal.createDimension(mesh_name+'_num_node', len(self.nodes) )
             if self._edges is not None:
                 nclocal.createDimension(mesh_name+'_num_edge', len(self.edges) )
